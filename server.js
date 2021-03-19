@@ -1,10 +1,20 @@
 const express = require('express');
+const connectDB = require('./config/db');
 
 // initialize our app variable with Express.
 const app = express();
 
+// Connect Database
+connectDB();
+
 // single endpoint
 app.get('/', (req, res) => res.send('API Running'));
+
+// Define Routes
+app.use('/api/users', require('./routes/api/users'));
+app.use('/api/auth', require('./routes/api/auth'));
+app.use('/api/profile', require('./routes/api/profile'));
+app.use('/api/posts', require('./routes/api/posts'));
 
 // process.env.PORT: look for an environment variable called port to use and when we deploy to heroku that's where it's gonna get the port number.
 // if not found a process.env.PORT then open in port 5000
