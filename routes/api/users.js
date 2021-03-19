@@ -2,8 +2,12 @@
 const express = require('express');
 const router = express.Router();
 
+const config = require('config');
+// const jwt = config.get('jwtSecret');
+
 const gravatar = require('gravatar');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 // https://express-validator.github.io/docs/
 // const {check, validationResult} = require('express-validator/check');
 const {check, validationResult} = require('express-validator');
@@ -40,7 +44,7 @@ router.post(
       // See if user exists already
       let user = await User.findOne({email});
       if (user) {
-        res.status(400).json({
+        return res.status(400).json({
           errors: [{msg: 'User already exists'}],
         });
       }
@@ -68,7 +72,27 @@ router.post(
       await user.save();
 
       // Return jsonwebtoken
-      res.send('User registered');
+      // get the payload which includes the user id
+      const payload = {
+        user: {
+          id: user.id,
+        },
+      };
+
+      // sign the token
+      jwt.sign(
+        // pass the payload
+        payload,
+        // pass the secret
+        config.get('jwtSecret'),
+        // expiration
+        {expiresIn: 3600000},
+        // inside the callback we'll get either an error or a token
+        (err, token) => {
+          if (err) throw err;
+          res.json({token});
+        }
+      );
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server error');

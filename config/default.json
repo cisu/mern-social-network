@@ -1,3 +1,4 @@
 {
-  "mongoURI": "mongodb+srv://Mern-social-network:Mern-social-network@devconnector.6sbnd.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+  "mongoURI": "mongodb+srv://Mern-social-network:Mern-social-network@devconnector.6sbnd.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+  "jwtSecret": "mySecretToken"
 }
